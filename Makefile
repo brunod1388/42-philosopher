@@ -6,7 +6,7 @@
 #    By: bgoncalv <bgoncalv@student.42lausanne.ch>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/04 00:43:59 by bgoncalv          #+#    #+#              #
-#    Updated: 2022/01/04 00:46:02 by bgoncalv         ###   ########.fr        #
+#    Updated: 2022/01/12 21:26:55 by bgoncalv         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ FLAGS		= -Wall -Wextra -Werror
 
 NAME 		= philo
 
-SRCS 	=	philo.c philo_utils.c
+SRCS 	=	srcs/philo.c srcs/philo_utils.c srcs/main.c
 
 OBJS = $(SRCS:.c=.o)
 
@@ -24,7 +24,7 @@ _PURPLE=\e[35m
 _END=\e[0m
 
 $(NAME):	
-			@gcc $(FLAGS) $(SRCS) -o $(NAME) 
+			@gcc $(FLAGS) $(SRCS) -o $(NAME)
 			@printf "philo		[$(_BLUE)✓$(_END)]\n"
 
 all : 		$(NAME)

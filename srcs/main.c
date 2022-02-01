@@ -1,39 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bgoncalv <bgoncalv@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/04 00:43:40 by bgoncalv          #+#    #+#             */
-/*   Updated: 2022/01/04 01:41:54 by bgoncalv         ###   ########.fr       */
+/*   Created: 2022/01/05 02:26:30 by bgoncalv          #+#    #+#             */
+/*   Updated: 2022/01/12 22:19:14 by bgoncalv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_H
-# define PHILO_H
-# include <stdio.h>
-# include <pthread.h>
-# include <libc.h>
-# include <stdlib.h>
-# define MAX_PHILO 150
+#include "../includes/philo.h"
 
-typedef struct s_philo
+int	main(int argc, char **argv)
 {
-	int		id;
-	int		state;
-	int		last_meal_time;
-}	t_philo;
+	t_world	world;
 
-typedef struct s_world
-{
-	int		nb_philo;
-	int		die_time;
-	int		eat_time;
-	int		sleep_time;
-	int		nb_eat;
-}	t_world;
-
-
-
-#endif
+	if (argc != 5 && argc != 6)
+		return (error(ARG_ERR, &world));
+	if (init_world(&world, argc, argv))
+		return (error(MALLOC_ERR, &world));
+	init_philo(&world);
+	return (EXIT_SUCCESS);
+}
