@@ -6,7 +6,7 @@
 /*   By: bgoncalv <bgoncalv@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 00:43:40 by bgoncalv          #+#    #+#             */
-/*   Updated: 2022/02/04 03:32:11 by bgoncalv         ###   ########.fr       */
+/*   Updated: 2022/02/04 14:44:39 by bgoncalv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,24 +18,21 @@
 # include <libc.h>
 # include <stdlib.h>
 # define MAX_PHILO 50
-# define UFREQ	50
+# define UFREQ	200
 
 typedef pthread_mutex_t	t_mutex;
-
-typedef enum e_state
-{
-	THINKING,
-	EATING,
-	SLEEPING,
-	DEAD
-}	t_state;
+typedef pthread_t		t_pthread;
 
 enum
 {
-	NO_ERR = 0,
-	ARG_ERR = 1,
-	MALLOC_ERR = 2,
-	MUTEX_ERR = 3
+	NO_ERR,
+	ARG_ERR,
+	FARGS_ERR,
+	MALLOC_ERR,
+	MUTEX_ERR,
+	TRD_ERR,
+	TRD_JOIN_ERR,
+	MUTEX_DSTR_ERR
 };
 
 typedef struct s_philo	t_philo;
@@ -60,15 +57,14 @@ typedef struct s_philo
 	int			id;
 	int			eat_count;
 	long long	last_meal;
-	pthread_t	trd;
+	t_pthread	trd;
 	t_mutex		*lfork;
 	t_mutex		*rfork;
 	t_world		*world;
 }	t_philo;
 
 int			init_world(t_world *world, int argc, char **argv);
-void		start_world(t_world *world);
-void		clear_world(t_world *world);
+int			start_world(t_world *world);
 
 void		*philo_life(void *philo);
 void		print_state(t_philo *p, char *s);
@@ -77,6 +73,5 @@ long long	get_timestamp(void);
 long long	get_utime(void);
 
 int			error(int errno, t_world *world);
-void		memdel(void **pt);
 
 #endif

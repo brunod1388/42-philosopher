@@ -6,7 +6,7 @@
 /*   By: bgoncalv <bgoncalv@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/12 21:25:16 by bgoncalv          #+#    #+#             */
-/*   Updated: 2022/02/04 03:39:32 by bgoncalv         ###   ########.fr       */
+/*   Updated: 2022/02/04 14:32:16 by bgoncalv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ static void	sleapt(t_philo *p, long long time)
 	long long	tstart;
 
 	tstart = get_timestamp();
-	while (p->world->all_alive && get_timestamp() - tstart < time)
+	while (p->world->all_alive && !p->world->all_eat
+		&& get_timestamp() - tstart < time)
 		usleep(UFREQ);
 }
 
@@ -25,14 +26,20 @@ static void	philo_eat(t_philo *p)
 {
 	pthread_mutex_lock(p->lfork);
 	print_state(p, "has taken a fork");
-	pthread_mutex_lock(p->rfork);
-	print_state(p, "has taken a fork");
-	p->last_meal = get_timestamp();
-	print_state(p, "is eating");
-	++p->eat_count;
-	sleapt(p, p->world->eat_time);
+	if (p->rfork != p->lfork)
+	{
+		pthread_mutex_lock(p->rfork);
+		print_state(p, "has taken a fork");
+		p->last_meal = get_timestamp();
+		print_state(p, "is eating");
+		++p->eat_count;
+		sleapt(p, p->world->eat_time);
+		pthread_mutex_unlock(p->rfork);
+	}
+	else
+		while (p->world->all_alive)
+			usleep(UFREQ);
 	pthread_mutex_unlock(p->lfork);
-	pthread_mutex_unlock(p->rfork);
 }
 
 static int	check_eat(t_world *w)

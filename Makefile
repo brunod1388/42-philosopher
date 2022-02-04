@@ -6,7 +6,7 @@
 #    By: bgoncalv <bgoncalv@student.42lausanne.ch>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/04 00:43:59 by bgoncalv          #+#    #+#              #
-#    Updated: 2022/02/04 03:40:21 by bgoncalv         ###   ########.fr        #
+#    Updated: 2022/02/04 14:03:16 by bgoncalv         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ _END=\e[0m
 
 %.o : %.c
 			@printf "$(_BLUE)Compiling $< $(_END)\n" $@
-			@${CC} ${FLAGS} $(INCLUDES) -c $< -o $@
+			@$(CC) $(FLAGS) $(INCLUDES) -c $< -o $@
 
 $(NAME):	$(OBJS)
 			@gcc $(FLAGS) $(INCLUDES) -o $(NAME) $(OBJS)
@@ -49,6 +49,6 @@ test :		re
 			./philo 4 400 100 100 5
 
 debug :		
-			@${CC} ${FLAGS} -g3 $(SRCS) -o philodebug
+			@$(CC) $(FLAGS) $(INCLUDES) -g3 $(SRCS) -o philodebug
 
 PHONY : re all clean fclean

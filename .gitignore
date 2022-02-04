@@ -1,4 +1,5 @@
 *.o
-philo*
+philo
+philodebug
 test*
 *.dSYM

@@ -6,28 +6,29 @@
 /*   By: bgoncalv <bgoncalv@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 00:43:43 by bgoncalv          #+#    #+#             */
-/*   Updated: 2022/02/04 03:35:38 by bgoncalv         ###   ########.fr       */
+/*   Updated: 2022/02/04 14:23:41 by bgoncalv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/philo.h"
+#include "philo.h"
 
 void	print_state(t_philo *p, char *s)
 {
 	long long	time;
 
 	time = get_timestamp() - p->world->t0;
-	if (!p->world->all_alive || p->world->all_eat)
-		return ;
 	pthread_mutex_lock(&p->world->writing);
-	printf("%lld ms %d %s\n", time, p->id, s);
+	if (p->world->all_alive && !p->world->all_eat)
+		printf("%lld ms %d %s\n", time, p->id, s);
 	pthread_mutex_unlock(&p->world->writing);
 }
 
-void	memdel(void **pt)
+static void	clear_world(t_world *world)
 {
-	free(*pt);
-	*pt = NULL;
+	if (world->philo)
+		free(world->philo);
+	if (world->fork)
+		free(world->fork);
 }
 
 int	error(int errno, t_world *world)
@@ -41,6 +42,16 @@ int	error(int errno, t_world *world)
 	}
 	if (errno == MALLOC_ERR)
 		printf("malloc_error\n");
+	if (errno == FARGS_ERR)
+		printf("farg_eror. Args has to be positive integer.\n");
+	if (errno == MUTEX_ERR)
+		printf("mutex_error\n");
+	if (errno == TRD_ERR)
+		printf("thread_create_error\n");
+	if (errno == TRD_JOIN_ERR)
+		printf("thread_join_error\n");
+	if (errno == MUTEX_DSTR_ERR)
+		printf("mutex_destroy_error\n");
 	clear_world(world);
 	return (errno);
 }
