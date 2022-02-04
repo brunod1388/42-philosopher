@@ -1,16 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_utils.c                                      :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bgoncalv <bgoncalv@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 00:43:43 by bgoncalv          #+#    #+#             */
-/*   Updated: 2022/01/12 23:38:54 by bgoncalv         ###   ########.fr       */
+/*   Updated: 2022/02/04 03:35:38 by bgoncalv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
+
+void	print_state(t_philo *p, char *s)
+{
+	long long	time;
+
+	time = get_timestamp() - p->world->t0;
+	if (!p->world->all_alive || p->world->all_eat)
+		return ;
+	pthread_mutex_lock(&p->world->writing);
+	printf("%lld ms %d %s\n", time, p->id, s);
+	pthread_mutex_unlock(&p->world->writing);
+}
 
 void	memdel(void **pt)
 {
@@ -39,12 +51,4 @@ long long	get_timestamp(void)
 
 	gettimeofday(&t, NULL);
 	return (t.tv_sec * 1000 + t.tv_usec / 1000);
-}
-
-long long	get_utime(void)
-{
-	struct timeval	t;
-
-	gettimeofday(&t, NULL);
-	return (t.tv_usec);
 }
