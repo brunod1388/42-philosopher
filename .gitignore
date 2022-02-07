@@ -3,3 +3,9 @@ philo
 philodebug
 test*
 *.dSYM
+
+philo_bonus/*.o
+philo_bonus/philo
+philo_bonus/philodebug
+philo_bonus/test*
+philo_bonus/*.dSYM

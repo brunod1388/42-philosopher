@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   philo_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bgoncalv <bgoncalv@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 00:43:40 by bgoncalv          #+#    #+#             */
-/*   Updated: 2022/02/07 21:37:04 by bgoncalv         ###   ########.fr       */
+/*   Updated: 2022/02/06 01:57:54 by bgoncalv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,14 @@
 # include <sys/time.h>
 # include <stdio.h>
 # include <pthread.h>
+# include <pthread.h>
+# include <semaphore.h>
 # include <libc.h>
 # include <stdlib.h>
 # define MAX_PHILO 50
-# define UFREQ	50
-
-typedef pthread_mutex_t	t_mutex;
-typedef pthread_t		t_pthread;
+# define UFREQ	100
+# define FORKSEM "/philo_forks"
+# define WRITESEM "/philo_write"
 
 enum
 {
@@ -29,13 +30,12 @@ enum
 	ARG_ERR,
 	FARGS_ERR,
 	MALLOC_ERR,
-	MUTEX_ERR,
-	TRD_ERR,
-	TRD_JOIN_ERR,
-	MUTEX_DSTR_ERR
+	FORK_ERR,
+	SEM_ERR
 };
 
 typedef struct s_philo	t_philo;
+typedef unsigned int	t_uint;
 
 typedef struct s_world
 {
@@ -48,19 +48,18 @@ typedef struct s_world
 	long long	sleep_time;
 	long long	t0;
 	t_philo		*philo;
-	t_mutex		*fork;
-	t_mutex		writing;
+	sem_t		*forks;
+	sem_t		*writing;
 }	t_world;
 
 typedef struct s_philo
 {
 	int			id;
+	int			pid;
 	int			eat_count;
 	long long	last_meal;
-	t_pthread	trd;
-	t_mutex		*lfork;
-	t_mutex		*rfork;
 	t_world		*world;
+	pthread_t	the_death;
 }	t_philo;
 
 int			init_world(t_world *world, int argc, char **argv);
@@ -70,7 +69,6 @@ void		*philo_life(void *philo);
 void		print_state(t_philo *p, char *s);
 
 long long	get_timestamp(void);
-long long	get_utime(void);
 
 int			error(int errno, t_world *world);
 
