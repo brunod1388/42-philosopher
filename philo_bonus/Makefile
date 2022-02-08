@@ -6,12 +6,12 @@
 #    By: bgoncalv <bgoncalv@student.42lausanne.ch>  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/04 00:43:59 by bgoncalv          #+#    #+#              #
-#    Updated: 2022/02/06 01:48:23 by bgoncalv         ###   ########.fr        #
+#    Updated: 2022/02/08 04:43:25 by bgoncalv         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC			= gcc
-# FLAGS		= -Wall -Wextra -Werror
+FLAGS		= -Wall -Wextra -Werror
 INCLUDES	= -I includes/
 NAME 		= philo
 

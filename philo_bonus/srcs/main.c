@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_bonus.c                                       :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bgoncalv <bgoncalv@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/05 02:26:30 by bgoncalv          #+#    #+#             */
-/*   Updated: 2022/02/05 03:35:05 by bgoncalv         ###   ########.fr       */
+/*   Updated: 2022/02/08 04:40:19 by bgoncalv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_bonus.h"
+#include "philo.h"
 
 int	main(int argc, char **argv)
 {
@@ -23,5 +23,7 @@ int	main(int argc, char **argv)
 	if (errno)
 		return (error(errno, &world));
 	errno = start_world(&world);
-	return (error(errno, &world));
+	if (errno)
+		return (error(errno, &world));
+	return (EXIT_SUCCESS);
 }

@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_bonus.c                                      :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bgoncalv <bgoncalv@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/04 00:43:43 by bgoncalv          #+#    #+#             */
-/*   Updated: 2022/02/06 02:11:42 by bgoncalv         ###   ########.fr       */
+/*   Updated: 2022/02/08 04:35:15 by bgoncalv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_bonus.h"
+#include "philo.h"
 
 void	print_state(t_philo *p, char *s)
 {
@@ -18,17 +18,31 @@ void	print_state(t_philo *p, char *s)
 
 	sem_wait(p->world->writing);
 	time = get_timestamp() - p->world->t0;
-	if (p->world->all_alive && !p->world->all_eat)
-		printf("%lld ms %d %s\n", time, p->id, s);
+	printf("%lld ms %d %s\n", time, p->id, s);
 	sem_post(p->world->writing);
 }
 
-static void	clear_world(t_world *world)
+void	*check_eat(void *world)
 {
-	if (world->philo)
-		free(world->philo);
-	if (world->forks)
-		free(world->forks);
+	int		i;
+	t_world	*w;
+
+	w = (t_world *) world;
+	i = 0;
+	while (i++ < w->nb_philo)
+		sem_wait(w->full_eat);
+	w->all_eat = 1;
+	return (NULL);
+}
+
+void	*check_death(void *world)
+{
+	t_world	*w;
+
+	w = (t_world *) world;
+	sem_wait(w->death);
+	w->all_alive = 0;
+	return (NULL);
 }
 
 int	error(int errno, t_world *world)
@@ -48,7 +62,8 @@ int	error(int errno, t_world *world)
 		printf("fork_error\n");
 	if (errno == SEM_ERR)
 		printf("semaphore_error\n");
-	clear_world(world);
+	if (world->philo)
+		free(world->philo);
 	return (errno);
 }
 
